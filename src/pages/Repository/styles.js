@@ -23,8 +23,7 @@ export const Owner = styled.header`
     }
 
     img {
-        width: 120px;
-        border-radius: 50%;
+        width: 180px;
         margin-top: 20px;
     }
 

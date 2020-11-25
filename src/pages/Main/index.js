@@ -14,18 +14,26 @@ export default class Main extends Component {
         loading: false,
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const repositories = localStorage.getItem('repositories');
 
-        if(repositories) {
+        if (repositories) {
             this.setState({ repositories: JSON.parse(repositories) });
+        }
+
+        try {
+            const response = await api.get('/popular?api_key=bb877ef70b973ed90e1287cefdcf44f7&language=pt-BR&page=1');
+            this.setState({ repositories: response.data.results })
+            console.log(response.data.results);
+        } catch (err) {
+            console.log(err)
         }
     }
 
     componentDidUpdate(_, prevState) {
         const { repositories } = this.state;
 
-        if(prevState.repositories != repositories) {
+        if (prevState.repositories != repositories) {
             localStorage.setItem('repositories', JSON.stringify(repositories));
         }
     }
@@ -52,35 +60,20 @@ export default class Main extends Component {
 
     render() {
         const { newRepo, loading, repositories } = this.state;
+        console.log({ repositories })
 
         return (
             <Container>
                 <h1>
                     <FaGithubAlt />
-                    Repositórios
+                    Últimos filmes lançados
                 </h1>
-
-                <Form onSubmit={this.handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Adicionar repositório"
-                        value={newRepo}
-                        onChange={this.handleInputChange}
-                    />
-
-                    <SubmitButton loading={loading}>
-                        { loading
-                        ? (<FaSpinner color= "#FFF" size={14} />)
-                        : (<FaPlus color="#fff" size={14} />)
-                        }
-                    </SubmitButton>
-                </Form>
 
                 <List>
                     {repositories.map(repository => (
-                        <li key={repository.name} >
-                            <span>{repository.name}</span>
-                            <Link to={`/repository/${encodeURIComponent(repository.name)}`}>Detalhes</Link>
+                        <li key={repository.title} >
+                            <span>{repository.title}</span>
+                            <Link to={`/detalhe/${encodeURIComponent(repository.id)}`}>Detalhes</Link>
                         </li>
                     ))}
                 </List>
