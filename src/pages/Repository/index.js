@@ -29,7 +29,7 @@ export default class Repository extends Component {
         console.log({ match })
 
         try {
-            const response = await api.get(`/${id}?api_key=bb877ef70b973ed90e1287cefdcf44f7&language=pt-BR`);
+            const response = await api.get(`/movie/${id}?api_key=bb877ef70b973ed90e1287cefdcf44f7&language=pt-BR`);
             this.setState({
                 repository: response.data,
                 loading: false,
